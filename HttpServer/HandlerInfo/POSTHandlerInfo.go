@@ -1,9 +1,8 @@
 package HandlerInfo
 
-import "net/http"
-
 type POSTHandlerInfo struct {
-	Params map[string]any
+	Params      map[string]interface{}
+	RequestBody map[string]interface{}
 }
 
-type POSTHandleFunc func(http.ResponseWriter, POSTHandlerInfo) error
+type POSTHandleFunc func(POSTHandlerInfo) (string, error)

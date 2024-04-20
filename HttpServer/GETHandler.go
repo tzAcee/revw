@@ -14,6 +14,6 @@ func NewGetHandler(handleFunc HandlerInfo.GETHandleFunc) *GETHandler {
 	return &GETHandler{HandlerInfo.GETHandlerInfo{}, handleFunc}
 }
 
-func (ch *GETHandler) handle(rw http.ResponseWriter, req *http.Request) error {
-	return ch.handleFunc(rw, ch.handlerInfo)
+func (ch *GETHandler) handle(rw http.ResponseWriter, req *http.Request) (string, error) {
+	return ch.handleFunc(ch.handlerInfo)
 }

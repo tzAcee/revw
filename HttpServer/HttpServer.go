@@ -2,9 +2,8 @@ package HttpServer
 
 import (
 	"fmt"
-	"log"
 	"net/http"
-	"os"
+	"revw/Logger"
 )
 
 type Config struct {
@@ -16,20 +15,17 @@ type HttpServerBase interface {
 }
 
 type HttpServer struct {
-	logger       *log.Logger
 	funcHandlers FuncHandlers
 }
 
 func NewHttpServer() *HttpServer {
-	logger := log.New(os.Stdout, "[revw-log] ", log.Ldate|log.Ltime)
 	concHttpServer := HttpServer{
-		logger,
-		*NewConcurentFuncHandlers(logger),
+		*NewConcurentFuncHandlers(),
 	}
 
 	err := concHttpServer.funcHandlers.RegisterUrls()
 	if err != nil {
-		logger.Fatal(err)
+		Logger.GetLogger().Fatal(err)
 		return nil
 	}
 
@@ -38,6 +34,6 @@ func NewHttpServer() *HttpServer {
 
 func (chs *HttpServer) Serve(cfg Config) error {
 	connectionUrl := fmt.Sprintf(":%d", cfg.Port)
-	chs.logger.Printf("Serving http-server on '%v'\n", connectionUrl)
+	Logger.GetLogger().Printf("Serving http-server on '%v'\n", connectionUrl)
 	return http.ListenAndServe(connectionUrl, nil)
 }

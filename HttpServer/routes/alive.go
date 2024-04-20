@@ -2,9 +2,6 @@ package routes
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
-	"net/http"
 	"revw/HttpServer/HandlerInfo"
 )
 
@@ -12,10 +9,10 @@ type aliveResponse struct {
 	Status string
 }
 
-func Alive(rw http.ResponseWriter, getHandlerInfo HandlerInfo.GETHandlerInfo) error {
+func Alive(getHandlerInfo HandlerInfo.GETHandlerInfo) (string, error) {
 	result, _ := json.Marshal(aliveResponse{"alive"})
 
-	fmt.Fprintln(rw, string(result))
+	return string(result), nil
 
-	return errors.New("hello error")
+	//return errors.New("hello error")
 }
