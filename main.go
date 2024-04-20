@@ -1,9 +1,17 @@
 package main
 
-import "revw/httpServer"
+import (
+	"flag"
+	"revw/HttpServer"
+)
 
 func main() {
-	var httpServer httpServer.HttpServer = httpServer.NewConcHttpServer()
+	var cfg HttpServer.Config
 
-	httpServer.Serve(3500)
+	flag.UintVar(&cfg.Port, "port", 3000, "server port of the API")
+	flag.Parse()
+
+	var httpServer HttpServer.HttpServerBase = HttpServer.NewHttpServer()
+
+	httpServer.Serve(cfg)
 }
