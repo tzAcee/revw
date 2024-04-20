@@ -16,6 +16,9 @@ func CreateRoutes() HandlerCollection {
 		"/review/request/begin": {
 			http.MethodPost: NewPostHandler(review.BeginRequest),
 		},
+		"/review/request/comment": {
+			http.MethodGet: NewGetHandler(review.GetCommentsFromUser),
+		},
 		"/review/read/begin": {
 			http.MethodPost: NewPostHandler(review.BeginRead),
 		},

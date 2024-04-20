@@ -8,8 +8,8 @@ import (
 
 type Comment struct {
 	ID    string
-	text  string
-	index uint
+	Text  string
+	Index uint
 }
 
 func newComment(text string, index uint) *Comment {
@@ -55,10 +55,20 @@ func (r *Reader) EditComment(id string, newText string) error {
 	comment, ok := r.comments[id]
 
 	if ok {
-		comment.text = newText
+		comment.Text = newText
 	} else {
 		return fmt.Errorf("comment with ID '%v' does not exist", id)
 	}
 
 	return nil
+}
+
+func (r *Reader) GetComments() []Comment {
+	comments := make([]Comment, len(r.comments))
+	index := 0
+	for _, v := range r.comments {
+		comments[index] = v
+	}
+
+	return comments
 }
