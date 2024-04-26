@@ -31,3 +31,24 @@ func BeginRequest(handlerInfo HandlerInfo.POSTHandlerInfo) (string, error) {
 
 	return string(response), nil
 }
+
+// expects {"ReviewID": "id"}
+func GetReview(handlerInfo HandlerInfo.POSTHandlerInfo) (string, error) {
+	reviewID, err := HandlerInfo.GetEntryOfRequestbody[string](handlerInfo.RequestBody, "ReviewID")
+	if err != nil {
+		return "", err
+	}
+
+	if len(reviewID) == 0 {
+		return "", errors.New("review id cannot be empty")
+	}
+
+	reviewSession, ok := RevwBL.GetSessionsManager().GetSessionById(reviewID)
+	if !ok {
+		return "", errors.New("could not find review session")
+	}
+
+	response, _ := json.Marshal(reviewSession)
+
+	return string(response), nil
+}

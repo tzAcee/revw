@@ -8,9 +8,9 @@ import (
 
 type ReviewSession struct {
 	ID               string // unique hash
-	creationDateTime time.Time
-	reviewText       *string
-	readers          map[string]Reader
+	CreationDateTime time.Time
+	ReviewText       *string
+	Readers          map[string]Reader
 }
 
 func NewReviewSession(text *string) *ReviewSession {
@@ -29,9 +29,9 @@ func NewReviewSession(text *string) *ReviewSession {
 }
 
 func (rs *ReviewSession) AddReader() *Reader {
-	readerID := HashString(fmt.Sprint(len(rs.readers)) + time.Now().String())
+	readerID := HashString(fmt.Sprint(len(rs.Readers)) + time.Now().String())
 
-	_, ok := rs.readers[readerID]
+	_, ok := rs.Readers[readerID]
 
 	if ok {
 		Logger.GetLogger().Printf("A reader with ID '%v' already exists in session '%v'\n", readerID, rs.ID)
@@ -39,7 +39,7 @@ func (rs *ReviewSession) AddReader() *Reader {
 	}
 
 	reader := NewReader(readerID)
-	rs.readers[readerID] = *reader
+	rs.Readers[readerID] = *reader
 
 	Logger.GetLogger().Printf("A new reader with ID '%v' joined the session '%v'\n", readerID, rs.ID)
 
@@ -47,6 +47,6 @@ func (rs *ReviewSession) AddReader() *Reader {
 }
 
 func (rs *ReviewSession) GetReaderByID(id string) (*Reader, bool) {
-	reader, ok := rs.readers[id]
+	reader, ok := rs.Readers[id]
 	return &reader, ok
 }

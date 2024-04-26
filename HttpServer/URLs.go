@@ -13,6 +13,9 @@ func CreateRoutes() HandlerCollection {
 		"/alive": {
 			http.MethodGet: NewGetHandler(routes.Alive),
 		},
+		"/review/get": {
+			http.MethodPost: NewPostHandler(review.GetReview),
+		},
 		"/review/request/begin": {
 			http.MethodPost: NewPostHandler(review.BeginRequest),
 		},
@@ -30,6 +33,16 @@ func CreateRoutes() HandlerCollection {
 		},
 		"/review/read/comment/edit": {
 			http.MethodPost: NewPostHandler(review.CommentEdit),
+		},
+	}
+
+	return handlers
+}
+
+func CreateUIRoutes() HandlerCollection {
+	handlers := HandlerCollection{
+		"/": {
+			http.MethodGet: NewFSHandler("./RevwUI/dist/"),
 		},
 	}
 
