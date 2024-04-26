@@ -1,4 +1,4 @@
-import { RequestReviewResponse } from "./responses/revw-api.responses";
+import { RequestReviewResponse, ReviewSessionResponse } from "./responses/revw-api.responses";
 
 export class revwAPIService {
     private url = "/api/v1/";
@@ -64,6 +64,44 @@ export class revwAPIService {
             console.error("could not fetch "+callUrl);
             console.error(e)
             return e;
+        }
+    }
+
+    public async GetReviewData(reviewID: string) : Promise<ReviewSessionResponse | undefined>
+    {
+        const callUrl = this.url+"review/get"
+
+        const data = {
+            "ReviewID": reviewID,
+        };
+
+        try
+        {
+            const result = await fetch(callUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+
+            if(result.status != 200)
+            {
+                // Error string
+                const decoder = new TextDecoder();
+                const decodedString = decoder.decode((await result.body.getReader().read()).value);
+                console.error(decodedString)
+                return undefined;
+            }
+
+            
+            const resultJson = await result.json() 
+            return resultJson as ReviewSessionResponse
+        } catch(e)
+        {
+            console.error("could not fetch "+callUrl);
+            console.error(e)
+            return undefined;
         }
     }
 
@@ -145,6 +183,49 @@ export class revwAPIService {
             }
 
             return resultJson as RequestReviewResponse;
+        } catch(e)
+        {
+            console.error("could not fetch "+callUrl);
+            console.error(e)
+            return e;
+        }
+    }
+
+    public async CreateComment(sessionID, readerID, commentText: string, index: number) : Promise<string>
+    {
+        const callUrl = this.url+"review/read/comment/add"
+
+        const data = {
+            "ReviewRequestID": sessionID,
+            "ReaderID": readerID,
+            "CommentText": commentText,
+            "CommentIndex": index
+        };
+
+        try
+        {
+            const result = await fetch(callUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+
+            if(result.status != 200)
+            {
+                // Error string
+                const decoder = new TextDecoder();
+                const decodedString = decoder.decode((await result.body.getReader().read()).value);
+                return decodedString;
+            }
+
+            
+            const resultJson = await result.json()
+            if(resultJson)
+                return "success";
+            return "failed";
+
         } catch(e)
         {
             console.error("could not fetch "+callUrl);
